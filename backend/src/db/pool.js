@@ -43,7 +43,12 @@ async function testConnection() {
     }
   }
 }
-
+app.get('/', (req, res) => {
+  res.json({ message: 'API is running' });
+});
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 testConnection();
 
 module.exports = pool;
