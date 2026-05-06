@@ -21,7 +21,13 @@ const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) return callback(null, true); // non-browser / same-origin
+
+      const isExplicitlyAllowed = allowedOrigins.includes(origin);
+      const isVercelApp = /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin);
+      const isLocalDev = /^http:\/\/localhost:(5173|3000)$/i.test(origin);
+
+      if (isExplicitlyAllowed || isVercelApp || isLocalDev) {
         return callback(null, true);
       }
       return callback(new Error('Not allowed by CORS'));
