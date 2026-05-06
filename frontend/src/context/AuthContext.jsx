@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem('token');
     if (token) {
       api.get('/auth/me')
-        .then(({ data }) => setUser(data))
+        .then((res) => setUser(res?.data || null))
         .catch(() => {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
@@ -30,7 +30,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback(async (email, password) => {
-    const { data } = await api.post('/auth/login', { email, password });
+    const res = await api.post('/auth/login', { email, password });
+    const data = res?.data;
+    if (!data?.token || !data?.user) throw new Error('Invalid login response');
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
     setUser(data.user);
@@ -38,7 +40,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   const register = useCallback(async (payload) => {
-    const { data } = await api.post('/auth/register', payload);
+    const res = await api.post('/auth/register', payload);
+    const data = res?.data;
+    if (!data?.token || !data?.user) throw new Error('Invalid register response');
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
     setUser(data.user);
