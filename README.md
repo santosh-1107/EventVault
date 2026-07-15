@@ -4,8 +4,8 @@ Production-ready full-stack platform for discovering events, selecting seats, an
 
 ## Live Demo
 
-- Frontend: `https://<your-vercel-app>.vercel.app`
-- Backend API: `https://<your-render-service>.onrender.com`
+- Frontend: `event-vault-two.vercel.app`
+
 
 ## Features
 
